@@ -1,14 +1,16 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
-	"flag"
+	"net/url"
+	"path"
 )
 
 const (
 	ExitCodeOK int = iota
-	ExitCodeParseFlagError
+	ExitCodeParseError
 	ExitCodeUsage
 	ExitCodeError
 )
@@ -19,20 +21,20 @@ type CLI struct {
 
 func (cli *CLI) Run(args []string) int {
 	var (
-		err error
-		version bool
-		user, password, host, dir string
+		err                                  error
+		version                              bool
+		username, password, baseUrl, baseDir string
 	)
 	flags := flag.NewFlagSet(Name, flag.ContinueOnError)
 	flags.SetOutput(cli.errStream)
-	flags.BoolVar(&version, "version", false, "print version information and quit")
-	flags.StringVar(&user, "user", "", "NAS account name")
-	flags.StringVar(&password, "password", "", "NAS account password")
-	flags.StringVar(&host, "host", "", "NAS Hostname (example \"nas.example.com\")")
-	flags.StringVar(&dir, "dir", "/usr/local/etc/letsencrypt/live/", "Base directory for let's encrypt")
+	flags.BoolVar(&version, "version", false, "Print version information and quit.")
+	flags.StringVar(&username, "user", "", "NAS account name.")
+	flags.StringVar(&password, "password", "", "NAS account password.")
+	flags.StringVar(&baseUrl, "url", "", "NAS protocol and host for web access. Port is optional. (example \"http://nas.example.com:8080\")")
+	flags.StringVar(&baseDir, "dir", "/usr/local/etc/letsencrypt/live/", "Base directory for let's encrypt certificates.")
 
 	if err = flags.Parse(args[1:]); err != nil {
-		return ExitCodeParseFlagError
+		return ExitCodeParseError
 	}
 
 	if version {
@@ -40,20 +42,25 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeOK
 	}
 
-	if user == "" || password == "" || host == "" {
+	if username == "" || password == "" || baseUrl == "" {
 		flags.Usage()
 		return ExitCodeUsage
 	}
 
-	sid, err := Auth(host, user, password)
+	u, err := url.Parse(baseUrl)
 	if err != nil {
-		fmt.Fprintf(cli.errStream, "%v", err)
+		fmt.Fprintf(cli.errStream, "%v\n", err)
+		return ExitCodeParseError
+	}
+
+	sid, err := Auth(baseUrl, username, password)
+	if err != nil {
+		fmt.Fprintf(cli.errStream, "%v\n", err)
 		return ExitCodeError
 	}
-	fmt.Println(sid)
 
-	if err := Upload(host, sid, dir + host); err != nil {
-		fmt.Fprintf(cli.errStream, "%v", err)
+	if err := Upload(baseUrl, sid, path.Join(baseDir, u.Hostname())); err != nil {
+		fmt.Fprintf(cli.errStream, "%v\n", err)
 		return ExitCodeError
 	}
 	return ExitCodeOK
