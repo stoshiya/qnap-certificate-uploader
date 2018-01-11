@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/url"
-	"path"
+	"path/filepath"
 )
 
 const (
@@ -59,7 +59,7 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeError
 	}
 
-	if err := Upload(baseUrl, sid, path.Join(baseDir, u.Hostname())); err != nil {
+	if err := Upload(baseUrl, sid, filepath.Join(baseDir, u.Hostname())); err != nil {
 		fmt.Fprintf(cli.errStream, "%v\n", err)
 		return ExitCodeError
 	}

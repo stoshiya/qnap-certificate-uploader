@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -46,15 +46,15 @@ func Auth(baseUrl string, user string, password string) (string, error) {
 }
 
 func Upload(baseUrl string, sid string, dir string) error {
-	cert, err := ioutil.ReadFile(path.Join(dir, "cert.pem"))
+	cert, err := ioutil.ReadFile(filepath.Join(dir, "cert.pem"))
 	if err != nil {
 		return err
 	}
-	key, err := ioutil.ReadFile(path.Join(dir, "privkey.pem"))
+	key, err := ioutil.ReadFile(filepath.Join(dir, "privkey.pem"))
 	if err != nil {
 		return err
 	}
-	chain, err := ioutil.ReadFile(path.Join(dir, "chain.pem"))
+	chain, err := ioutil.ReadFile(filepath.Join(dir, "chain.pem"))
 	if err != nil {
 		return err
 	}

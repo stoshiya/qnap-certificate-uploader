@@ -14,4 +14,4 @@ coverage: test
 	go tool cover -html=coverage.out
 
 clean:
-	rm -f $(client) *.go~ coverage.out
+	rm -f $(client) *~ coverage.out
