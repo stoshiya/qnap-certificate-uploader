@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/base64"
 	"encoding/xml"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -19,7 +20,7 @@ func Auth(baseUrl string, user string, password string) (string, error) {
 	values.Add("user", user)
 	values.Add("pwd", base64.StdEncoding.EncodeToString([]byte(password)))
 
-	req, err := http.NewRequest("POST", baseUrl + "/cgi-bin/authLogin.cgi", strings.NewReader(values.Encode()))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/cgi-bin/authLogin.cgi", baseUrl), strings.NewReader(values.Encode()))
 	if err != nil {
 		return "", err
 	}
@@ -66,7 +67,7 @@ func Upload(baseUrl string, sid string, dir string) error {
 	values.Add("ic_update", "update")
 	values.Add("issuer_certificate_content", string(chain))
 
-	req, err := http.NewRequest("POST",baseUrl + "/cgi-bin/sys/sysRequest.cgi?&subfunc=security&apply=1&action=ssl&todo=upload", strings.NewReader(values.Encode()))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/cgi-bin/sys/sysRequest.cgi?&subfunc=security&apply=1&action=ssl&todo=upload", baseUrl), strings.NewReader(values.Encode()))
 	if err != nil {
 		return err
 	}

@@ -13,6 +13,7 @@ const (
 	ExitCodeParseError
 	ExitCodeUsage
 	ExitCodeError
+	ExitCodeURLParseError
 )
 
 type CLI struct {
@@ -50,7 +51,7 @@ func (cli *CLI) Run(args []string) int {
 	u, err := url.Parse(baseUrl)
 	if err != nil {
 		fmt.Fprintf(cli.errStream, "%v\n", err)
-		return ExitCodeParseError
+		return ExitCodeURLParseError
 	}
 
 	sid, err := Auth(baseUrl, username, password)
@@ -59,10 +60,9 @@ func (cli *CLI) Run(args []string) int {
 		return ExitCodeError
 	}
 
-	if err := Upload(baseUrl, sid, filepath.Join(baseDir, u.Hostname())); err != nil {
+	if err = Upload(baseUrl, sid, filepath.Join(baseDir, u.Hostname())); err != nil {
 		fmt.Fprintf(cli.errStream, "%v\n", err)
 		return ExitCodeError
 	}
 	return ExitCodeOK
 }
-
