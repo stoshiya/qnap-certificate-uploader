@@ -2,11 +2,12 @@ language: go
 go:
 - 1.8.x
 - 1.9.x
-
 before_install:
 - go get github.com/mattn/goveralls
 - go get github.com/pierrre/gotestcover
-
 script:
 - make test
 - goveralls -service=travis-ci
+notifications:
+  slack:
+    secure: B54+s6zRWrBwp+XvTpJe5y5IYE2dyu5TjbLEz5u/3A08zz8dM7n1AdgwsMyfb5HnSsP+w1IozL3OS1pkHpQOlvdiKKhhAiEOzgYPhhSOHsRIB/736az+Ki9uEmCPN0ZQUDxsg7Wn6mk6U3bYbIqO6GzPV3SJ4CWUfgsJvlNSHnIPRLL1S+qsaZ2eUZnFtmc9D9iUwcJXgJVe2R+KC9wmVs+MITFUyWyS4o5EY5vpNZy8kpbaZdJSbGdd2j6QZRX0I9SOjHSLlJPQwVwcO53lFmI0kbiT8hOuuOEuy7gCgrxaeoG2v6NN0ClzQHsKzjQEIR9eKAb6FrLuk57UjGzcIsXFsZzdgpVz5L71Hn7ugjh6ua4/J4RmZG5dUsX1v/8LVRwfTVQYn7dC+BdMN9OaH5qopCRWc8DCDvWlrUgWW9gYf8fcTJg9qKHZb8Dor6tuAimwcNwuebVaZdI7TRvApFnDbQaOFmVJ/LHX/Ev5Uu50ttJNoEoTLaeJSDD78IWsIJjLGGSEszy5NzV9hRpkpWBLJk+8BuTLLtJB7f8l2T5Ak4MfvjrTWzKQbcaHAbJkFffYSA8d7sfXnIwLa/X91SdHdIjLJqAXUVR93SSledC3qUksZU980utQZRTnCSbRK4ExOobU+R4Fy93NX1UnQytx/6mO6+Ea/ZAM4xyqV0M=
