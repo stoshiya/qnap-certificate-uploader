@@ -1,10 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"net/http/httptest"
 	"net/http"
+	"path/filepath"
 	"testing"
-	"fmt"
 )
 
 func TestAuth(t *testing.T) {
@@ -24,7 +25,7 @@ func TestUploadCertNotFound(t *testing.T) {
 		w.WriteHeader(http.StatusOK)
 	}))
 
-	dir := "testdata/cert-not-found"
+	dir := filepath.Join("testdata", "cert-not-found")
 
 	err := Upload(server.URL, "sid", dir)
 	if err.Error() != fmt.Sprintf("open %s/cert.pem: no such file or directory", dir) {
@@ -32,13 +33,12 @@ func TestUploadCertNotFound(t *testing.T) {
 	}
 }
 
-
 func TestUploadPrivateKeyNotFound(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	}))
 
-	dir := "testdata/privkey-not-found"
+	dir := filepath.Join("testdata", "privkey-not-found")
 
 	err := Upload(server.URL, "sid", dir)
 	if err.Error() != fmt.Sprintf("open %s/privkey.pem: no such file or directory", dir) {
@@ -51,7 +51,7 @@ func TestUploadChainNotFound(t *testing.T) {
 		w.WriteHeader(http.StatusOK)
 	}))
 
-	dir := "testdata/chain-not-found"
+	dir := filepath.Join("testdata", "chain-not-found")
 
 	err := Upload(server.URL, "sid", dir)
 	if err.Error() != fmt.Sprintf("open %s/chain.pem: no such file or directory", dir) {
