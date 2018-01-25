@@ -1,5 +1,9 @@
 # qnap-certificate-uploader
 
+[![Build Status](https://travis-ci.org/stoshiya/qnap-certificate-uploader.svg?branch=master)](https://travis-ci.org/stoshiya/qnap-certificate-uploader)
+[![Coverage Status](https://coveralls.io/repos/github/stoshiya/qnap-certificate-uploader/badge.svg?branch=master)](https://coveralls.io/github/stoshiya/qnap-certificate-uploader?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/stoshiya/qnap-certificate-uploader)](https://goreportcard.com/report/github.com/stoshiya/qnap-certificate-uploader)
+
 Let's encrypt certificates upload client for QNAP NAS.
 
 ## Build
