@@ -12,8 +12,9 @@ const (
 	ExitCodeOK int = iota
 	ExitCodeParseError
 	ExitCodeUsage
-	ExitCodeError
 	ExitCodeURLParseError
+	ExitCodeAuthError
+	ExitCodeUploadError
 )
 
 type CLI struct {
@@ -57,12 +58,12 @@ func (cli *CLI) Run(args []string) int {
 	sid, err := Auth(baseUrl, username, password)
 	if err != nil {
 		fmt.Fprintf(cli.errStream, "%v\n", err)
-		return ExitCodeError
+		return ExitCodeAuthError
 	}
 
 	if err = Upload(baseUrl, sid, filepath.Join(baseDir, u.Hostname())); err != nil {
 		fmt.Fprintf(cli.errStream, "%v\n", err)
-		return ExitCodeError
+		return ExitCodeUploadError
 	}
 	return ExitCodeOK
 }
