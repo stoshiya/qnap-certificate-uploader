@@ -8,10 +8,10 @@ $(client): $(clientFiles)
 	go build $(opt) -o $(client) $(clientFiles)
 
 test: $(clientFiles) $(testFiles)
-	gotestcover -v -coverprofile=coverage.out
+	echo 'mode: atomic' > coverage.txt && go list ./... | xargs -n1 -I{} sh -c 'go test -covermode=atomic -coverprofile=coverage.tmp {} && tail -n +2 coverage.tmp >> coverage.txt' && rm coverage.tmp
 
 coverage: test
-	go tool cover -html=coverage.out
+	go tool cover -html=coverage.txt
 
 clean:
-	rm -f $(client) *~ coverage.out
+	rm -f $(client) *~ coverage.txt

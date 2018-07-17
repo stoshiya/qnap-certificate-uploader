@@ -5,7 +5,6 @@ go:
 - 1.10.x
 before_install:
 - go get github.com/mattn/goveralls
-- go get github.com/pierrre/gotestcover
 script:
 - make test
 - goveralls -service=travis-ci
